@@ -3,26 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MarcarAgenda;
+package Agenda;
 
 import BD.CtrlBancoDeDados;
 import Models.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author rhuanbarros
  */
-@WebServlet(name = "MarcarAgenda", urlPatterns = {"/sistema/MarcarAgenda"})
-public class MarcarAgenda extends HttpServlet {
+@WebServlet(name = "SalvarAgenda", urlPatterns = {"/sistema/SalvarAgenda"})
+public class SalvarAgenda extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,13 +33,32 @@ public class MarcarAgenda extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Exame> exames = CtrlBancoDeDados.getExames();
-        request.setAttribute("exames", exames);
-        List<Medico> medicos = CtrlBancoDeDados.getMedicos();
-        request.setAttribute("medicos", medicos);        
-        
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/sistema/marcar_agenda.jsp");
-        rd.forward(request, response);
+        System.out.println("executando salvar_agenda");
+
+        String exame = request.getParameter("exame");
+        String medico = request.getParameter("medico");
+        String data = request.getParameter("data");
+        String hora = request.getParameter("hora");
+
+        HttpSession session = request.getSession();
+        Usuario usuarioLogado = (Usuario) session.getAttribute("usuario.logado");
+        Exame e = CtrlBancoDeDados.getExameById(Integer.parseInt(exame));
+        Medico m = CtrlBancoDeDados.getMedicoById(Integer.parseInt(medico));
+
+        Agenda agenda = CtrlBancoDeDados.getAgendaByDataEHora(data, hora);
+        if (agenda == null) {
+            Agenda agendaNova = new Agenda(usuarioLogado, e, m, data, hora);
+            CtrlBancoDeDados.addAgenda(agendaNova);
+            System.out.println("salvou agenda");
+        } else {
+            //ja existe exame marcado para esta data e horario
+            //RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/sistema/marcar_agenda.jsp?msg=datahoraocupada");
+            //rd.forward(request, response);
+            System.out.println("data ocupada");
+            response.sendRedirect("/clinica/sistema/MarcarAgenda?msg=datahoraocupada");
+            return;
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

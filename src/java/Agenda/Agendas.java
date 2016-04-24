@@ -1,63 +1,61 @@
-package Login;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Agenda;
 
 import BD.CtrlBancoDeDados;
-import Models.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author 0084158
+ * @author rhuanbarros
  */
-@WebServlet(urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "Agendas", urlPatterns = {"/sistema/Agenda"})
+public class Agendas extends HttpServlet {
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-    }
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String login = request.getParameter("login");
-        String senha = request.getParameter("senha");
-
-        HttpSession session = request.getSession();
+        List<Models.Agenda> agenda = CtrlBancoDeDados.getAgenda();
+        request.setAttribute("agenda", agenda);
         
-        List<Usuario> usuarios = CtrlBancoDeDados.getUsuarios();
-        
-        for( Usuario u: usuarios ) {
-            if(u.getLogin().equals(login) && u.getSenha().equals(senha)) {
-                session.setAttribute("usuario.logado", u);
-                System.out.printf("Usuario %s logado", u.getLogin());
-                response.sendRedirect("/clinica/sistema/MarcarAgenda");
-                return;
-            }
-        }
-        
-        System.out.println("login e/ou senhas incorreto");
-        RequestDispatcher rd = request.getRequestDispatcher("/index.jsp?msg=loginerror");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/sistema/agenda.jsp");
         rd.forward(request, response);
-        return;
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *

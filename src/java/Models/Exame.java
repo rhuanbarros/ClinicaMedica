@@ -46,6 +46,11 @@ public class Exame {
     public void setTipo(ExameTipo tipo) {
         this.tipo = tipo;
     }
+    
+    public String getTipoString() {
+        return tipo.toString();
+    }
+    
     private int id;
     private static int idProximo=0;
     private static int getIdProximo() {

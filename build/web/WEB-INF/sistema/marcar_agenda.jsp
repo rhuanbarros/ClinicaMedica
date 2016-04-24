@@ -26,13 +26,13 @@
                     String usuariologin = "";
                 %>                      
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Marcar exame</a></li>
+                    <li class="active"><a href="MarcarAgenda">Marcar exame</a></li>
                         <% if (usuario != null && (usuario.getTipo() == Usuario.UsuarioTipo.USUARIO_CLINICA || usuario.getTipo() == Usuario.UsuarioTipo.ADM)) {
                                 usuariologin = usuario.getLogin();
                         %>
                     <li><a href="#">Médicos</a></li>
                     <li><a href="#">Exames</a></li>
-                    <li><a href="#">Agenda de exames</a></li>
+                    <li><a href="Agenda">Agenda de exames</a></li>
                         <%}%>
                         <% if (usuario != null && usuario.getTipo() == Usuario.UsuarioTipo.ADM) {
                         %>
@@ -49,6 +49,17 @@
         </nav>
 
         <div class="container">
+            <%
+            String msg = request.getParameter("msg");
+            if( msg != null && msg.equals("datahoraocupada")  ) {
+            %>
+            <br>
+            <br>
+            <div class="alert alert-warning">
+                <strong>Atenção</strong> Data e hora não disponíveis para agendamento.
+            </div>
+            <% } %>
+
             <div class="row">
                 <h3 class="page-header">Marcar exame</h3>
             </div>
@@ -62,9 +73,11 @@
                                 <select class="form-control" name="exame">
                                     <%
                                         List<Exame> exames = (List<Exame>) request.getAttribute("exames");
-                                        for(Exame e: exames ){
+                                        for (Exame e : exames) {
+                                            int id = e.getId();
+                                            String nome = e.getNome();
                                     %>
-                                        <option value="<%e.getId();%>"><%=e.getNome()%></option>
+                                    <option value="<%=id %>"><%=nome%></option>
                                     <%}%>
                                 </select>
                             </div>
@@ -76,9 +89,11 @@
                                 <select class="form-control" name="medico">
                                     <%
                                         List<Medico> medicos = (List<Medico>) request.getAttribute("medicos");
-                                        for(Medico m: medicos ){
+                                        for (Medico m : medicos) {
+                                            int id = m.getId();
+                                            String nome = m.getNome();
                                     %>
-                                        <option value="<%m.getId();%>">Dr(a). <%=m.getNome()%></option>
+                                    <option value="<%=id %>"><%=nome%></option>
                                     <%}%>
                                 </select>
                             </div>
@@ -88,13 +103,32 @@
                             <label class="control-label col-sm-2" for="data">Data</label>
                             <div class="col-xs-3">
                                 <div id="datetimepicker" class="input-append date">
-                                    <input type="text" class="form-control" name="datahora"></input>
+                                    <input type="text" class="form-control" name="data"></input>
                                     <span class="add-on">
                                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
+
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label">Horários disponíveis</label>
+                            <div class="col-xs-3 selectContainer">
+                                <select class="form-control" name="hora">
+                                    <option value="01:00">09:00</option>
+                                    <option value="02:00">10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00">17:00</option>
+                                </select>
+                            </div>
+                        </div>
+
 
                         <div class="form-group">        
                             <div class="col-sm-offset-3 col-sm-10">
@@ -124,7 +158,7 @@
                 </script>
                 <script type="text/javascript">
                     $('#datetimepicker').datetimepicker({
-                        format: 'dd/MM/yyyy hh:mm:ss',
+                        format: 'dd/MM/yyyy',
                         language: 'pt-BR'
                     });
                 </script>

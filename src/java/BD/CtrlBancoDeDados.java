@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 import java.util.List;
 
 public class CtrlBancoDeDados {
@@ -20,6 +21,38 @@ public class CtrlBancoDeDados {
     
     static public List<Exame> getExames() {
         return BancoDeDados.exames;
+    }
+    
+    static public Agenda getAgendaByDataEHora(String data, String hora) {
+        Iterator<Agenda> iteratorAgenda = BancoDeDados.agenda.iterator();
+        Agenda a=null;
+        while(iteratorAgenda.hasNext()) {
+            a = iteratorAgenda.next();
+            if( a.getDataString().equals(data) && a.getHoraString().equals(hora) ) break;
+        }        
+        return a;
+    }
+    
+    static public Exame getExameById(int id) {
+        Iterator<Exame> iteratorExame = BancoDeDados.exames.iterator();
+        Exame e=null;
+        while(iteratorExame.hasNext()) {
+            e = iteratorExame.next();
+            if( e.getId() == id ) break;
+        }        
+        return e;
+    }
+    
+    static public Medico getMedicoById(int id) {
+        Iterator<Medico> iteratorMedico = BancoDeDados.medicos.iterator();
+        Medico e = null;
+        while (iteratorMedico.hasNext()) {
+            e = iteratorMedico.next();
+            if (e.getId() == id) {
+                break;
+            }
+        }
+        return e;
     }
     
     static public void addExame(Exame exame) {

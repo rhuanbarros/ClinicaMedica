@@ -24,7 +24,7 @@
         <div class="login-page">
           <div class="form">
               <form class="login-form" method="post" action="Login">
-                  <input type="text" placeholder="usuario" name="login"/>
+                  <input autofocus type="text" placeholder="usuario" name="login"/>
                   <input type="password" placeholder="senha" name="senha"/>
               <button>login</button>
             </form>

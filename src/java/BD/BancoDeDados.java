@@ -42,10 +42,10 @@ public class BancoDeDados implements Serializable {
         medicos.add(medicoMaria);
         medicos.add(medicoJose);
         
-        agenda.add(new Agenda(usuarioWeb, exameHdl, medicoJoao, LocalDateTime.of(2016, Month.MAY, 1, 13, 0) ));
-        agenda.add(new Agenda(usuarioWeb, exameBili, medicoMaria, LocalDateTime.of(2016, Month.MAY, 3, 10, 0) ));
-        agenda.add(new Agenda(usuarioWeb, exameAlbumina, medicoJose, LocalDateTime.of(2016, Month.MAY, 1, 11, 0) ));
-        agenda.add(new Agenda(usuarioWeb, exameAlbumina, medicoJose, LocalDateTime.of(2016, Month.MAY, 1, 12, 0) ));
+        agenda.add(new Agenda(usuarioWeb, exameHdl, medicoJoao, "16/05/2016", "13:00" ));
+        agenda.add(new Agenda(usuarioWeb, exameBili, medicoMaria, "03/05/2016", "10:00" ));
+        agenda.add(new Agenda(usuarioWeb, exameAlbumina, medicoJose, "01/05/2016", "11:00" ));
+        agenda.add(new Agenda(usuarioWeb, exameAlbumina, medicoJose, "01/05/2016", "12:00" ));
     }
     
 }
